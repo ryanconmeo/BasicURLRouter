@@ -70,16 +70,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return rule.browser
         }
 
-        if let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems {
-            for item in items {
-                guard let value = item.value else { continue }
-                for candidate in [value, value.removingPercentEncoding ?? value] {
-                    if let nestedHost = URL(string: candidate)?.host,
-                       let rule = config.rules.first(where: { nestedHost.contains($0.match) }) {
-                        return rule.browser
-                    }
-                }
-            }
+        // Check the full decoded URL string so wrapped/tracking links (e.g. Outlook Safe Links)
+        // are matched regardless of which query param or path segment holds the target URL.
+        let raw = url.absoluteString
+        let decoded = raw.removingPercentEncoding ?? raw
+        if let rule = config.rules.first(where: { decoded.contains($0.match) }) {
+            return rule.browser
         }
 
         return config.defaultBrowser
