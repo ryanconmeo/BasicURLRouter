@@ -46,6 +46,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         route(url)
     }
 
+    // Info.plist registers us as the owner of HTML documents, so double-clicking
+    // a local .html file dispatches an open-documents event (not GURL). Without
+    // this, macOS reports "cannot open files in the HTML text format". Local
+    // file:// URLs have no host, so they fall through to the default browser.
+    func application(_ application: NSApplication, open urls: [URL]) {
+        urls.forEach(route)
+    }
+
     private func registerLaunchAgent() {
         let plistURL = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/LaunchAgents/com.ryannguyen.BasicURLRouter.plist")
