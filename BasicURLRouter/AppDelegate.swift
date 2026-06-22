@@ -8,9 +8,9 @@ private struct Rule: Decodable {
 private struct Config: Decodable {
     var defaultBrowser: String = "com.google.Chrome"
     var rules: [Rule] = [
-        Rule(match: "dev.azure.com", browser: "com.apple.Safari"),
-        Rule(match: "visualstudio.com", browser: "com.apple.Safari"),
-        Rule(match: "ado", browser: "com.apple.Safari")
+        Rule(match: "dev.azure.com", browser: "com.microsoft.edgemac"),
+        Rule(match: "visualstudio.com", browser: "com.microsoft.edgemac"),
+        Rule(match: "ado", browser: "com.microsoft.edgemac")
     ]
 
     static func load() -> Config {
